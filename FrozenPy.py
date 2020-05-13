@@ -53,6 +53,10 @@ def read_out(DIR_NAME,prefix=''):
             df.reset_index(drop=True,inplace=True)                 # Reset indexing
             df.rename(columns=lambda x: x.strip(),inplace=True)    # remove whitespace
 
+            # add a row of zeros to replace first skipped row
+            new_row = np.zeros([1, len(df.columns)])
+            new_row = pd.DataFrame(new_row, columns=df.columns)
+            df = pd.concat([new_row, df])
 
             # Write new .csv if it does not exist
             NewCSVname = os.path.splitext(file)[0] + '.raw.csv'                 # name for new csv file
@@ -162,9 +166,8 @@ def detect_freezing(Threshold_df, threshold = 10):
 
     Freezing_np = np.zeros((rows,columns))                   # initialize
     for c in range(columns):                               # loop through columns
-        for r in range(4,rows-4):                            # loop through rows
+        for r in range(5,rows):                            # loop through rows
             data2check = Threshold_values[r-5:r,c]           # 1 second of data to check
-            
 
             if all(n <= threshold  for n in data2check):     # if freezing => 1
                 Freezing_np[r,c] = 1
@@ -210,7 +213,7 @@ def correct_freezing(Freezing_df):
     Freezing_final = np.zeros((rows,columns))         # initialize
     for c in range(0,columns):                        # loop through columns
 
-        for r in range(4,rows-4):                     # loop through rows
+        for r in range(4,rows):                     # loop through rows
             previous = Freezing_values[r-1,c]         # previous row
             current = Freezing_values[r,c]            # current row
 
@@ -266,7 +269,7 @@ def slicedata(df, n_trials, start_time, length, ITI, fs=5, Behav='Freezing'):
     # slice data with timestamps and average      
     final_data = np.array([])                                         # initialize
     for (start, stop) in timestamps:                                  # loop through timestamps
-        averaged_trial = df.xs(Behav)[start*fs:stop*fs].mean().values # slice and average
+        averaged_trial = df.xs(Behav)[start*fs+1:stop*fs+1].mean().values # slice and average
         final_data  = np.append(final_data, averaged_trial)           # append
         
     return final_data
@@ -316,24 +319,23 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
 
     
     # Trial prep
-    ID_metadata    = np.tile(ID,Trials)                                         # ID metadata
+    ID_metadata = np.tile(ID,Trials)                                         # ID metadata
     Trial_metadata = [ele for ele in range(1,Trials+1) for i in range(len(ID))] # trial metadata length of n_rats
-    ITI            = CS+US+ISI                                                  # ITI length
+    ITI = CS+US+ISI                                                  # ITI length
 
-    
-    #  CS                                    
+    # CS
     CS_data = slicedata(df, n_trials=Trials, start_time=BL,                     # slice data
-                        length = CS, ITI = ITI)
+                        length=CS, ITI=ITI)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'CS': CS_data}   # CS dataframe
-    CS_df   = pd.DataFrame(dict4pandas)
+    CS_df = pd.DataFrame(dict4pandas)
 
-    
+
     #  US
     start_time = BL + CS                                          # start time
     US_data = slicedata(df, n_trials=Trials, start_time=start_time,             # slice data
-                        length = US, ITI = ITI)
+                        length=US, ITI=ITI)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'US': US_data}   # US dataframe
-    US_df   = pd.DataFrame(dict4pandas)
+    US_df = pd.DataFrame(dict4pandas)
 
 
     #  ISI
@@ -413,7 +415,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
     # Trial prep
     ID_metadata    = np.tile(ID,Trials)                                         # ID metadata
     Trial_metadata = [ele for ele in range(1,Trials+1) for i in range(len(ID))] # trial metadata length of n_rats
-    ITI            = SCS[0]+SCS[1]+US+ISI                                       # ITI length
+    ITI            = SCS[0]+SCS[1]+US+ISI                                      # ITI length
 
     
     # SCS - Tone 
@@ -428,7 +430,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
     # SCS - Noise
     CS_metadata   = [ele for ele in ['Noise'] for i in range(len(ID)*Trials)]   # noise metadata length of n_rats*n_trials
 
-    start_time = BL + SCS[0]                                                    # start time
+    start_time = BL + SCS[0]                                                # start time
     CS_data = slicedata(df, n_trials=Trials, start_time=start_time,             # slice data
                         length = SCS[1], ITI = ITI)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata,                  # noise dataframe
@@ -441,7 +443,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
 
 
     #  US
-    start_time = BL + SCS[0] + SCS[1]                                           # start time
+    start_time = BL + SCS[0] + SCS[1]                                        # start time
     US_data = slicedata(df, n_trials=Trials, start_time=start_time,             # slice data
                         length = US, ITI = ITI)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'US': US_data}   # US dataframe
@@ -449,7 +451,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
 
 
     #  ISI
-    start_time = BL + SCS[0] + SCS[1] + US                                      # start time
+    start_time = BL + SCS[0] + SCS[1] + US                                    # start time
     ISI_data = slicedata(df, n_trials=Trials, start_time=start_time,            # slice data
                          length = ISI, ITI = ITI)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'ISI': ISI_data} # ISI dataframe
