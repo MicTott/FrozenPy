@@ -4,7 +4,7 @@ FrozenPy is a small suit of python function developed to analyze threshold data 
 
 ## Usage
 
-![alt text](https://github.com/MicTott/FrozenPy/blob/master/Examples/figures/Cond_plots.png")
+![alt text](https://github.com/MicTott/FrozenPy/blob/master/Examples/figures/Cond_plots.png "Example plots")
 
 
 ## Notes
