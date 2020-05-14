@@ -43,7 +43,7 @@ def read_out(DIR_NAME,prefix=''):
                                 header= None,                 # No header
                                 sep = 'Subject ID ',          # Delimiter
                                 skipinitialspace = True)
-            Names = format_names(Names, prefix) # format names
+            Names = _format_names(Names, prefix) # format names
 
             # Create Dataframe .csv data
             df = pd.read_csv(os.path.join(DIR_NAME, file),
@@ -68,7 +68,7 @@ def read_out(DIR_NAME,prefix=''):
 
     print('Done!')
     
-def format_names(Names,prefix=''):
+def _format_names(Names,prefix=''):
     Names = Names.drop(0,axis=1)                # Drop first blank column
     Names = Names.values.ravel()                # Remove brackets from numbers
 
