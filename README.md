@@ -6,7 +6,7 @@ FrozenPy is designed so that it is easy to add metadata (group, sex, etc.) and f
 
 ## Usage
 
-##### Installation
+#### Installation
 
 FrozenPy cannot currently be installed via pip, so for if you want to use it you can download or clone this repository to your local machine by clicking ``` Clone or download ``` in the upper right corner,
 
@@ -15,7 +15,7 @@ or it can be cloned using git with:
 git clone https://github.com/MicTott/FrozenPy
 ```
 
-##### Importing FrozenPy functions
+#### Importing FrozenPy functions
 
 Because FrozenPy cannot be installed by pip yet, you need to be in the directory containing containing 'FrozenPy.py' to import the functions. This is easily done with the 'os' package:
 ```Python
@@ -25,7 +25,7 @@ os.chdir(path)
 import FrozenPy as fp
 ```
 
-##### Read .out files
+#### Read .out files
 Converting .out to .raw.csv, read .raw.csv:
 ```Python
 # Base directory containing .out files
@@ -38,7 +38,7 @@ fp.read_out(out_dir)
 data_raw = fp.read_rawcsv('your_data.raw.csv')
 ```
 
-##### Detect freezing and average
+#### Detect freezing and average
 Detect freezing:
 ```Python
 # detect freezing
