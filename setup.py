@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 HERE = pathlib.Path(__file__).parent
 
-VERSION = '0.1.5'
+VERSION = '0.1.6'
 PACKAGE_NAME = 'FrozenPy'
 AUTHOR = 'Michael Totty'
 AUTHOR_EMAIL = 'MicTott@gmail.com'

@@ -17,12 +17,10 @@ git clone https://github.com/MicTott/FrozenPy
 
 #### Importing FrozenPy functions
 
-Because FrozenPy cannot be installed by pip yet, you need to be in the directory containing containing 'FrozenPy.py' to import the functions. This is easily done with the 'os' package:
+FrozenPy can easily be installed via [pip](https://pip.pypa.io/en/stable/installing/). Type the follow into your terminal to install FrozenPy.
+
 ```Python
-import os
-path = '/your/path/to/FrozenPy'
-os.chdir(path)
-import FrozenPy as fp
+pip install FrozenPy
 ```
 
 #### Read .out files
