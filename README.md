@@ -8,16 +8,7 @@ FrozenPy is designed so that it is easy to add metadata (group, sex, etc.) and f
 
 #### Installation
 
-FrozenPy cannot currently be installed via pip, so for if you want to use it you can download or clone this repository to your local machine by clicking ``` Clone or download ``` in the upper right corner,
-
-or it can be cloned using git with:
-```
-git clone https://github.com/MicTott/FrozenPy
-```
-
-#### Importing FrozenPy functions
-
-FrozenPy can easily be installed via [pip](https://pip.pypa.io/en/stable/installing/). Type the follow into your terminal to install FrozenPy.
+FrozenPy can easily be installed via [pip](https://pip.pypa.io/en/stable/installing/). Type the following into your terminal to install FrozenPy.
 
 ```Python
 pip install FrozenPy
