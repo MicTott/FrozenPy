@@ -1,16 +1,16 @@
 
 
-Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 
+Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10 Start Clock 03/23/2020 13:08:10
 
-Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   
-Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  
-Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            
-Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     
-Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   
-Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                
-Subject ID CRH7                 Subject ID CRH12                Subject ID CRH17                Subject ID CRH1                 Subject ID CRH13                Subject ID CRH8                 Subject ID CRH2                 Subject ID DELETE               
-Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           
-Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           
+Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s   Experiment ID Totty Cond 540s
+Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200                  Resolution 200
+Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000            Duration 0:09:00.000
+Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds     Block Duration 540  seconds
+Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1                   Block Count 1
+Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1                Group ID Squad 1
+Subject ID Rat7                 Subject ID Rat12                Subject ID Rat17                Subject ID Rat1                 Subject ID Rat13                Subject ID Rat8                 Subject ID Rat2                 Subject ID DELETE               
+Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00           Lower Threshold 20.00
+Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00           Upper Threshold 50.00
 00:00:00.000	7.080078	100.000000	100.000000	100.000000	99.951172	99.951172	100.000000	5.957031
 	4.687500	100.000000	100.000000	100.000000	24.169922	100.000000	100.000000	1.318359
 	48.486328	23.388672	100.000000	100.000000	17.285156	100.000000	3.076172	26.074219
