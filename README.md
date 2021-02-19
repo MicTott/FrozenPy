@@ -1,6 +1,6 @@
 # FrozenPy
 
-FrozenPy is a small suit of Python functions for detecting freezing behavior and averaging data based on paradigm structure, with a particular focus on Pavlovian conditioning paradigms. Freezing is detected by thresholding motion data under a defined value (e.g. 10 a.u.) for a defined minimum length of time (1 sec). It also includes functions for converting .out files generated from MedPC to easier-to-handle .csv files.
+FrozenPy is a small collection of Python functions for detecting freezing behavior and averaging data based on a threshold and experimental parameters, with a particular focus on Pavlovian conditioning paradigms. Freezing is detected by thresholding motion data under a defined value (e.g., 10 a.u.) for a defined minimum length of time (1 sec). It also includes functions for converting .out files generated from MedPC to easier-to-handle .csv files.
 
 FrozenPy is designed so that it is easy to add metadata (group, sex, etc.) and formats data for use with popular plotting (Seaborn) and statistical (Pingouin) packages within Python.
 
@@ -46,7 +46,7 @@ frz_bl, frz_trials = fp.get_averagedslices(df=data_freezing,
                                          Behav='Freezing')
 ```
 
-This would output two variables: ```frz_bl``` which contained the averaged BL data for each subject, and ```frz_trials``` which contained CS, US, and ISI data for each subject. These are seperated because BL is factorial data whereas Trials are repeated measures. Combining these into one dataframe gets weird in long format and it's easiest to keep these separated for plotting and statistics.
+This would output two variables: ```frz_bl``` which contained the averaged BL data for each subject, and ```frz_trials``` which contained CS, US, and ISI data for each subject. These are separated because BL is factorial data whereas Trials are repeated measures.
 
 ## Notes
 
@@ -54,7 +54,5 @@ This code was developed specifically for the [Maren Lab](http://marenlab.org/ "M
 
 ## Future directions
 
-* pip integration
-* plot CS data
-* take advantage of xarrays
+* take advantage of xarrays (not in the near future)
 * provide visible feedback to allow for threshold adjustments (not in the near future unless needed)
