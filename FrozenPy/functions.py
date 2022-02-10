@@ -13,7 +13,7 @@ import os
 def read_out(DIR_NAME, prefix='Rat'):
 
     """
-    Reads all MedPC .out files from the input directory and saves 
+    Reads all MedPC .out files from the input directory and saves
     as .raw.csv file in the same directory.
 
     Note: This file does not resave files if they already exist. To rewrite
@@ -31,7 +31,7 @@ def read_out(DIR_NAME, prefix='Rat'):
     This function does not return variables, but instead saves the read data
     into a new .raw.csv file.
     """
-        
+
     os.chdir(DIR_NAME)
     for file in os.listdir(DIR_NAME):
         if (file.endswith('.out')):
@@ -55,13 +55,13 @@ def read_out(DIR_NAME, prefix='Rat'):
 
 def read_rawcsv(fname, delete='Y'):
 
-    """Reads and creates a pandas dataframe from a specified .raw.csv file created by read_out. 
+    """Reads and creates a pandas dataframe from a specified .raw.csv file created by read_out.
     Can also delete specified columns so that only desired data is loaded.
 
     Parameters
     ----------
     fname : str
-        name of the desired file 
+        name of the desired file
     delete : str, optional
         deletes columns labled 'DELETE' in the .raw.csv file. 'y' for yes, 'n' for no. ('y' by default)
 
@@ -99,7 +99,7 @@ def read_metadata(metadata_dir, sep=','):
     metadata : pandas dataframe
         dataframe containing the respective metadata
     """
-    
+
     os.chdir(metadata_dir)                                                  # change directory
     for fname in os.listdir(metadata_dir):                                  # search directory
         if (fname.endswith('.metadata.csv')):                               # find metadata
@@ -135,19 +135,19 @@ def _read_names(DIR_NAME, file, prefix):
                         skipinitialspace = True)
     names = names.drop(names.columns[0], axis=1) # drop first blank column
     names = names.columns.ravel() # remove brackets from numbers
-    
+
     # if int change to char and add prefix
     if names.dtype.type is np.int_:
             names = np.char.mod('%d', names)
             names = [prefix + i for i in names]
-            
+
     # np array to list and remove whitespace
     names = names.tolist()
     names = [x.strip() for x in names]
     return names
 
 def _read_data(DIR_NAME, file, index):
-    
+
     """
     Reads the data from specified columns in .out files
 
@@ -166,14 +166,14 @@ def _read_data(DIR_NAME, file, index):
     data : array
         an array (matrix) of threshold data from .out files
     """
-    
+
     df = pd.read_csv(os.path.join(DIR_NAME, file),
                      delimiter='\t',
                      skiprows = 13,
                      header=None,)
     df = df.drop(df.columns[0], axis=1) # drop first column (blank)
     data = df.iloc[:, index].values # only get desired indexes
-    
+
     return data
 
 # ==================================
@@ -188,8 +188,8 @@ def detect_freezing(Threshold_df, threshold = 10):
     at least one second. A new array of 1s and 0s are created denoting freezing and not freezing,
     respectively.
 
-    Note: This code will need to be updated with inputs defining Fs and freezing (ex. immobile for 
-    < 1 sec or more/less) to be broadly useful outside the Maren Lab. 
+    Note: This code will need to be updated with inputs defining Fs and freezing (ex. immobile for
+    < 1 sec or more/less) to be broadly useful outside the Maren Lab.
 
     Parameters
     ----------
@@ -219,9 +219,9 @@ def detect_freezing(Threshold_df, threshold = 10):
 
     Freezing_df = pd.DataFrame(Freezing_np)
     Corrected_Freezing = _correct_freezing(Freezing_df)
-
+    
     Corrected_Freezing.columns = Threshold_df.columns
-    Corrected_Freezing = Corrected_Freezing.multiply(100)
+
 
     Behav_df = pd.concat([Threshold_df, Corrected_Freezing],keys=['Threshold', 'Freezing'])
 
@@ -230,11 +230,11 @@ def detect_freezing(Threshold_df, threshold = 10):
 def _correct_freezing(Freezing_df):
 
     """
-    Corrects freezing detected by detectFreezing(), which only defines 
+    Corrects freezing detected by detectFreezing(), which only defines
     freezing one sample at a time,and thus cannot account for freezing onset in
-    which 1 second of freezing must be counted. For example, at freezing onset 
+    which 1 second of freezing must be counted. For example, at freezing onset
     5 samples (1 sec) must be below below threhsold values, but only detectFreezing()
-    only defines 0.2 sec of freezing at time. So, this function looks for 
+    only defines 0.2 sec of freezing at time. So, this function looks for
     freezing onset and changes that '1' to a '5' to account for this.
 
     Note: This code will also need to be updated with Fs to be used outside the Maren Lab.
@@ -266,7 +266,7 @@ def _correct_freezing(Freezing_df):
             if current == 0:
                 Freezing_final[r, c] = 0
             elif current == 1 and previous == 0:
-                Freezing_final[r, c] = 5
+                Freezing_final[r-4:r+1, c] = 1
             elif current == 1 and previous == 1:
                 Freezing_final[r, c] = 1
 
@@ -285,7 +285,7 @@ def slicedata(df, n_trials, start_time, length, ITI, fs=5, Behav='Freezing'):
     Parameters
     ----------
     df : pandas dataframe
-        dataframe generated from Threshold2Freezing() 
+        dataframe generated from Threshold2Freezing()
     n_trials : int, optional
         number of trials
     start_time : int, optional
@@ -312,7 +312,7 @@ def slicedata(df, n_trials, start_time, length, ITI, fs=5, Behav='Freezing'):
     for trial in range(0,n_trials):                                              # loop through trials
         timestamps[trial] = [start_time+ITI*trial, start_time+length+ITI*trial] # start, stop timestamps
 
-    # slice data with timestamps and average      
+    # slice data with timestamps and average
     final_data = np.array([])                                         # initialize
     for (start, stop) in timestamps:                                  # loop through timestamps
         averaged_trial = df.xs(Behav)[start*fs+1:stop*fs+1].mean().values # slice and average
@@ -327,7 +327,7 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
     Parameters
     ----------
     df : pandas dataframe
-        dataframe generated from Threshold2Freezing() 
+        dataframe generated from Threshold2Freezing()
     BL : int, optional
         length of baseline period in seconds
     CS : int, optional
@@ -344,7 +344,7 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
         desired behavioral data ('Freezing' or 'Threshold'; default='Freezing')
     Group: str
         group metadata to assign. mainly useful for within-subjects data where the same subjects
-        have different experimental conditions. Leave as default if not within-subjects. 
+        have different experimental conditions. Leave as default if not within-subjects.
 
     Returns
     -------
@@ -354,14 +354,14 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
         a pandas dataframe with averaged CS, US, and ISI data
     """
 
-    # Baseline 
+    # Baseline
     ID = df.xs(Behav).columns                                                   # get IDs
 
     BL_timestamps = [0,BL*fs]                                                   # BL timestamps
     BL_data = df.xs(Behav)[BL_timestamps[0]:BL_timestamps[1]].mean().values     # slice and average data
 
     dict4pandas = {'ID': ID, 'BL': BL_data}                                     # BL dataframe
-    BL_df = pd.DataFrame(dict4pandas)                                     
+    BL_df = pd.DataFrame(dict4pandas)
 
 
     # Trial prep
@@ -413,13 +413,13 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
 
 def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Group=[]):
 
-    """Flight version of get_averagedslices(). Slices and averages data for 
+    """Flight version of get_averagedslices(). Slices and averages data for
        baseline and individual stimuli within trials.
 
     Parameters
     ----------
     df : pandas dataframe
-        dataframe generated from Threshold2Freezing() 
+        dataframe generated from Threshold2Freezing()
     BL : int, optional
         length of baseline period in seconds
     SCS : list, int, optional
@@ -436,7 +436,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
         desired behavioral data ('Freezing' or 'Threshold'; default='Freezing')
     Group: str
         group metadata to assign. mainly useful for within-subjects data where the same subjects
-        have different experimental conditions. Leave as default if not within-subjects. 
+        have different experimental conditions. Leave as default if not within-subjects.
 
     Returns
     -------
@@ -453,9 +453,9 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
 
     BL_timestamps = [0,BL*fs]                                                   # BL timestamps
     BL_data = df.xs(Behav)[BL_timestamps[0]:BL_timestamps[1]].mean().values     # slice and average data
-    
+
     dict4pandas = {'ID': ID, 'BL': BL_data}                                     # BL dataframe
-    BL_df = pd.DataFrame(dict4pandas)                                     
+    BL_df = pd.DataFrame(dict4pandas)
 
 
     # Trial prep
@@ -464,10 +464,10 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
     ITI = SCS[0]+SCS[1]+US+ISI                                      # ITI length
 
 
-    # SCS - Tone 
+    # SCS - Tone
     CS_metadata = [ele for ele in ['Tone'] for i in range(len(ID)*Trials)]    # tone metadata length of n_rats*n_trials
     CS_data = slicedata(df, n_trials=Trials, start_time=BL,                     # slice data
-                        length = SCS[0], ITI = ITI, Behav=Behav) 
+                        length = SCS[0], ITI = ITI, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata,                  # tone dataframe
                    'CS type': CS_metadata, 'CS Freezing': CS_data}
     Tone_df = pd.DataFrame(dict4pandas)
