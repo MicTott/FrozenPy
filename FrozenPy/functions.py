@@ -180,7 +180,7 @@ def _read_data(DIR_NAME, file, index):
 #  Functions for detecting freezing
 # ==================================
 
-def detect_freezing(Threshold_df, threshold = 10):
+def detect_freezing(Threshold_df, threshold, fs):
 
     """
     Detects freezing using a threshold from raw motion (MedPC Threshold) data. This function
@@ -188,15 +188,14 @@ def detect_freezing(Threshold_df, threshold = 10):
     at least one second. A new array of 1s and 0s are created denoting freezing and not freezing,
     respectively.
 
-    Note: This code will need to be updated with inputs defining Fs and freezing (ex. immobile for
-    < 1 sec or more/less) to be broadly useful outside the Maren Lab.
-
     Parameters
     ----------
     Threshold_df : pandas dataframe
         dataframe generated from readRaw()
-    threshold : int, optional
+    threshold : int
         desired threshold, 10 by default
+    fs : int
+        sampling frequency
 
     Returns
     -------
@@ -211,15 +210,15 @@ def detect_freezing(Threshold_df, threshold = 10):
 
     Freezing_np = np.zeros((rows, columns))
     for c in range(columns):
-        for r in range(5, rows):
-            data2check = Threshold_values[r-5:r, c] # 1 second of data to check
+        for r in range(fs, rows):
+            data2check = Threshold_values[r-fs:r, c] # 1 second of data to check
 
             if all(n <= threshold  for n in data2check):
                 Freezing_np[r, c] = 1
 
     Freezing_df = pd.DataFrame(Freezing_np)
-    Corrected_Freezing = _correct_freezing(Freezing_df)
-    
+    Corrected_Freezing = _correct_freezing(Freezing_df, fs)
+
     Corrected_Freezing.columns = Threshold_df.columns
 
 
@@ -227,22 +226,24 @@ def detect_freezing(Threshold_df, threshold = 10):
 
     return Behav_df
 
-def _correct_freezing(Freezing_df):
+def _correct_freezing(Freezing_df, fs):
 
     """
     Corrects freezing detected by detectFreezing(), which only defines
     freezing one sample at a time,and thus cannot account for freezing onset in
-    which 1 second of freezing must be counted. For example, at freezing onset
-    5 samples (1 sec) must be below below threhsold values, but only detectFreezing()
-    only defines 0.2 sec of freezing at time. So, this function looks for
-    freezing onset and changes that '1' to a '5' to account for this.
+    which 1 second of freezing must be counted.
 
-    Note: This code will also need to be updated with Fs to be used outside the Maren Lab.
+    For example, for a sampling frequency of 5 Hz, at freezing onset 5 samples (1 sec)
+    must be below below threhsold values, but detectFreezing() only defines
+    0.2 sec of freezing at a time. So, this function looks for freezing onset and changes
+    the previous fs-1 samples to 1 to account for this.
 
     Parameters
     ----------
     Freezing_df : pandas dataframe
         dataframe generated from detectFreezing()
+    fs : int
+        sampling frequency
 
     Returns
     -------
@@ -259,15 +260,15 @@ def _correct_freezing(Freezing_df):
     Freezing_final = np.zeros((rows,columns))
     for c in range(0,columns):
 
-        for r in range(4,rows):
+        for r in range(fs-1,rows):
             previous = Freezing_values[r-1,c]
             current = Freezing_values[r,c]
 
-            if current == 0:
+            if current == 0: #not freezing
                 Freezing_final[r, c] = 0
-            elif current == 1 and previous == 0:
-                Freezing_final[r-4:r+1, c] = 1
-            elif current == 1 and previous == 1:
+            elif current == 1 and previous == 0: #first frame of freezing
+                Freezing_final[r-(fs-1):r+1, c] = 1
+            elif current == 1 and previous == 1: # still freezing
                 Freezing_final[r, c] = 1
 
     Corrected_Freezing_df = pd.DataFrame(Freezing_final)
@@ -278,7 +279,7 @@ def _correct_freezing(Freezing_df):
 #  Functions for slicing data
 # ============================
 
-def slicedata(df, n_trials, start_time, length, ITI, fs=5, Behav='Freezing'):
+def slicedata(df, n_trials, start_time, length, ITI, fs, Behav='Freezing'):
 
     """Gets timestamps then slices and averages data accordingly
 
