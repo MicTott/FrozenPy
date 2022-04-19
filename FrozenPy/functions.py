@@ -316,7 +316,7 @@ def slicedata(df, n_trials, start_time, length, ITI, fs, Behav='Freezing'):
     # slice data with timestamps and average
     final_data = np.array([])                                         # initialize
     for (start, stop) in timestamps:                                  # loop through timestamps
-        averaged_trial = df.xs(Behav)[start*fs+1:stop*fs+1].mean().values # slice and average
+        averaged_trial = df.xs(Behav)[start*fs+1:stop*fs+1].mean().values*100 # slice and average
         final_data = np.append(final_data, averaged_trial)           # append
 
     return final_data
