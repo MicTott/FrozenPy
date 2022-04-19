@@ -321,7 +321,7 @@ def slicedata(df, n_trials, start_time, length, ITI, fs, Behav='Freezing'):
 
     return final_data
 
-def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',Group=[]):
+def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs,Behav='Freezing',Group=[]):
 
     """Slices and averages data for baseline and individual stimuli within trials
 
@@ -372,7 +372,7 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
 
     # CS
     CS_data = slicedata(df, n_trials=Trials, start_time=BL,                     # slice data
-                        length=CS, ITI=ITI, Behav=Behav)
+                        length=CS, ITI=ITI, fs=fs, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'CS': CS_data}   # CS dataframe
     CS_df = pd.DataFrame(dict4pandas)
 
@@ -380,7 +380,7 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
     # US
     start_time = BL + CS                                          # start time
     US_data = slicedata(df, n_trials=Trials, start_time=start_time,             # slice data
-                        length=US, ITI=ITI, Behav=Behav)
+                        length=US, ITI=ITI, fs=fs, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'US': US_data}   # US dataframe
     US_df = pd.DataFrame(dict4pandas)
 
@@ -388,7 +388,7 @@ def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs=5,Behav='Freezing',
     # ISI
     start_time = BL + CS + US                                                   # start time
     ISI_data = slicedata(df, n_trials=Trials, start_time=start_time,            # slice data
-                         length = ISI, ITI = ITI, Behav=Behav)
+                         length = ISI, ITI = ITI, fs=fs, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'ISI': ISI_data} # ISI dataframe
     ISI_df = pd.DataFrame(dict4pandas)
 
@@ -468,7 +468,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
     # SCS - Tone
     CS_metadata = [ele for ele in ['Tone'] for i in range(len(ID)*Trials)]    # tone metadata length of n_rats*n_trials
     CS_data = slicedata(df, n_trials=Trials, start_time=BL,                     # slice data
-                        length = SCS[0], ITI = ITI, Behav=Behav)
+                        length = SCS[0], ITI = ITI, fs=fs, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata,                  # tone dataframe
                    'CS type': CS_metadata, 'CS Freezing': CS_data}
     Tone_df = pd.DataFrame(dict4pandas)
@@ -479,7 +479,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
 
     start_time = BL + SCS[0]                                                # start time
     CS_data = slicedata(df, n_trials=Trials, start_time=start_time,             # slice data
-                        length = SCS[1], ITI = ITI, Behav=Behav)
+                        length = SCS[1], ITI = ITI, fs=fs, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata,                  # noise dataframe
                    'CS type': CS_metadata, 'CS Freezing': CS_data}
     Noise_df = pd.DataFrame(dict4pandas)
@@ -492,7 +492,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
     # US
     start_time = BL + SCS[0] + SCS[1]                                        # start time
     US_data = slicedata(df, n_trials=Trials, start_time=start_time,             # slice data
-                        length = US, ITI = ITI, Behav=Behav)
+                        length = US, ITI = ITI, fs=fs, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'US': US_data}   # US dataframe
     US_df = pd.DataFrame(dict4pandas)
 
@@ -500,7 +500,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
     # ISI
     start_time = BL + SCS[0] + SCS[1] + US                                    # start time
     ISI_data = slicedata(df, n_trials=Trials, start_time=start_time,            # slice data
-                         length = ISI, ITI = ITI, Behav=Behav)
+                         length = ISI, ITI = ITI, fs=fs, Behav=Behav)
     dict4pandas = {'ID': ID_metadata, 'Trial': Trial_metadata, 'ISI': ISI_data} # ISI dataframe
     ISI_df  = pd.DataFrame(dict4pandas)
 
