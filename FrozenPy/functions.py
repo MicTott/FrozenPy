@@ -359,7 +359,7 @@ def get_averagedslices(df,Trials, fs, BL=180,CS=10,US=2,ISI=58,Behav='Freezing',
     ID = df.xs(Behav).columns                                                   # get IDs
 
     BL_timestamps = [0,BL*fs]                                                   # BL timestamps
-    BL_data = df.xs(Behav)[BL_timestamps[0]:BL_timestamps[1]].mean().values     # slice and average data
+    BL_data = df.xs(Behav)[BL_timestamps[0]:BL_timestamps[1]].mean().values*100     # slice and average data
 
     dict4pandas = {'ID': ID, 'BL': BL_data}                                     # BL dataframe
     BL_df = pd.DataFrame(dict4pandas)
@@ -453,7 +453,7 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
     ID = df.xs(Behav).columns                                                   # get IDs
 
     BL_timestamps = [0,BL*fs]                                                   # BL timestamps
-    BL_data = df.xs(Behav)[BL_timestamps[0]:BL_timestamps[1]].mean().values     # slice and average data
+    BL_data = df.xs(Behav)[BL_timestamps[0]:BL_timestamps[1]].mean().values*100     # slice and average data
 
     dict4pandas = {'ID': ID, 'BL': BL_data}                                     # BL dataframe
     BL_df = pd.DataFrame(dict4pandas)
