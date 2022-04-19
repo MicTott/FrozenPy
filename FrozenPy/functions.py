@@ -321,7 +321,7 @@ def slicedata(df, n_trials, start_time, length, ITI, fs, Behav='Freezing'):
 
     return final_data
 
-def get_averagedslices(df,Trials,BL=180,CS=10,US=2,ISI=58,fs,Behav='Freezing',Group=[]):
+def get_averagedslices(df,Trials, fs, BL=180,CS=10,US=2,ISI=58,Behav='Freezing',Group=[]):
 
     """Slices and averages data for baseline and individual stimuli within trials
 
