@@ -521,3 +521,112 @@ def get_averagedslices_flight(df,BL,SCS,US,ISI,Trials,fs=5,Behav='Freezing',Grou
         Post_df = pd.merge(Group_df, Post_df, on='ID', copy='True')                # Post + group
 
     return BL_df, SCS_df, Post_df
+
+
+
+# ================ Timestamps ================
+
+
+def get_freezing_start(frz_thrsh_df):
+    """
+    Determine the starting points of freezing bouts for each subject in a given dataframe.
+    
+    The function identifies transitions from 0 to 1 in the 'Freezing' section of the input dataframe.
+    These transitions are considered as the start of freezing bouts.
+    
+    Parameters
+    ----------
+    frz_thrsh_df : pandas dataframe
+        Input dataframe containing a multi-index or single index structure, with 'Freezing' as 
+        one of its sections/labels. The values within the 'Freezing' section should be sequences 
+        of 0s and 1s, where 1 indicates a freezing bout and 0 indicates non-freezing.
+    
+    Returns
+    -------
+    start_lgc_df : pandas dataframe
+        A dataframe with the same columns as the input dataframe. It contains Boolean values 
+        indicating the start of a freezing bout.
+    
+    start_idx_df : pandas dataframe
+        A dataframe with the same columns as the input dataframe. It contains the indices from 
+        the input dataframe where freezing bouts begin.
+    """
+
+    # get freezing data
+    freezing_df = frz_thrsh_df.xs('Freezing')
+    searchval = [0, 1] # search values for eand of freezing bouts
+
+    # get indexes and columns
+    freezing_idx = freezing_df.index
+    columns = freezing_df.columns
+
+    n_loop = 0
+    for c in columns: # loop through columns (i.e. subjects)
+            n_loop = n_loop + 1
+
+            # get "start" logical and indexes
+            start_lgc = (freezing_df[c].values[:-1]==searchval[0]) & \
+                       (freezing_df[c].values[1:]==searchval[1])
+            start_lgc = np.pad(start_lgc, (0,1)) # add one "0" back to the end
+            start_idx = freezing_idx[start_lgc]
+
+            # make dictionaires
+            start_lgc_dict = {c: start_lgc}
+            start_idx_dict = {c: start_idx}
+
+            # make first dataframes
+            if n_loop == 1:
+                start_lgc_df = pd.DataFrame(data=start_lgc_dict)
+                start_idx_df = pd.DataFrame(data=start_idx_dict)
+
+            else:
+                # concatenate logical dataframes
+                lgc_df_to_concat = pd.DataFrame(data=start_lgc_dict)
+                start_lgc_df = pd.concat([start_lgc_df, lgc_df_to_concat], axis=1)
+
+                # concatenate index dataframes
+                idx_df_to_concat = pd.DataFrame(data=start_idx_dict)
+                start_idx_df = pd.concat([start_idx_df, idx_df_to_concat], axis=1)
+
+    return start_lgc_df, start_idx_df
+
+
+def get_freezing_stop(frz_thrsh_df): 
+
+    # get freezing data
+    freezing_df = frz_thrsh_df.xs('Freezing')
+    searchval = [1, 0] # search values for eand of freezing bouts
+
+    # get indexes and columns
+    freezing_idx = freezing_df.index
+    columns = freezing_df.columns
+
+    n_loop = 0
+    for c in columns: # loop through columns (i.e. subjects)
+            n_loop = n_loop + 1
+
+            # get "stop" logical and indexes
+            stop_lgc = (freezing_df[c].values[:-1]==searchval[0]) & \
+                       (freezing_df[c].values[1:]==searchval[1])
+            stop_lgc = np.pad(stop_lgc, (0,1)) # add one "0" back to the end
+            stop_idx = freezing_idx[stop_lgc]
+
+            # make dictionaires
+            stop_lgc_dict = {c: stop_lgc}
+            stop_idx_dict = {c: stop_idx}
+
+            # make first dataframes
+            if n_loop == 1:
+                stop_lgc_df = pd.DataFrame(data=stop_lgc_dict)
+                stop_idx_df = pd.DataFrame(data=stop_idx_dict)
+
+            else:
+                # concatenate logical dataframes
+                lgc_df_to_concat = pd.DataFrame(data=stop_lgc_dict)
+                stop_lgc_df = pd.concat([stop_lgc_df, lgc_df_to_concat], axis=1)
+
+                # concatenate index dataframes
+                idx_df_to_concat = pd.DataFrame(data=stop_idx_dict)
+                stop_idx_df = pd.concat([stop_idx_df, idx_df_to_concat], axis=1)
+
+    return stop_lgc_df, stop_idx_df
