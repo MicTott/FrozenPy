@@ -633,7 +633,7 @@ def get_freezing_stop(frz_thrsh_df):
     return stop_lgc_df, stop_idx_df
 
 
-def plot_freezing_threshold(frz_thrsh_df, threshold=5, title='Motion data', save=FALSE, savedir=''):
+def plot_freezing_threshold(frz_thrsh_df, save, threshold=5,  title='Motion data', savedir=''):
     
     data = frz_thrsh_df
     cols = data.columns
@@ -674,7 +674,7 @@ def plot_freezing_threshold(frz_thrsh_df, threshold=5, title='Motion data', save
     plt.subplots_adjust(hspace=.5)  # Adjust the vertical space between subplots
     plt.show()
 
-    if save == TRUE:
+    if save:
         plt.savefig(savedir)
         plt.close()
     
