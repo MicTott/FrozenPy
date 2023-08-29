@@ -5,6 +5,7 @@
 import numpy as np
 import pandas as pd
 import os
+import matplotlib.pyplot as plt
 
 # ============================
 #  Functions for loading data
@@ -630,3 +631,52 @@ def get_freezing_stop(frz_thrsh_df):
                 stop_idx_df = pd.concat([stop_idx_df, idx_df_to_concat], axis=1)
 
     return stop_lgc_df, stop_idx_df
+
+
+def plot_freezing_threshold(frz_thrsh_df, threshold=5, title='Motion data', save=FALSE, savedir=''):
+    
+    data = frz_thrsh_df
+    cols = data.columns
+    
+    start_lgc_df, start_idx_df = get_freezing_start(data)
+    stop_lgc_df, stop_idx_df = get_freezing_stop(data)
+    
+    # Determine grid size for subplots
+    n = len(cols)
+    rows = int(np.ceil(np.sqrt(n)))
+    cols = int(np.ceil(n / rows))
+    
+    fig, axs = plt.subplots(rows, cols, figsize=(rows*5, cols*5)) # Adjust figsize as needed
+    
+    for idx, rat in enumerate(data.columns):
+        ax = axs.flat[idx]  # Get the current axis
+    
+        ax.plot(data[rat].xs('Threshold').values, alpha=0.75)
+    
+        for i in range(0, len(stop_idx_df[rat])):
+            ax.axvspan(start_idx_df[rat][i], stop_idx_df[rat][i], facecolor='grey', alpha=0.5)
+            ax.hlines(threshold, 0, len(data[rat].xs('Threshold').values), color='r')
+            
+        ax.set_xlabel('Time (samples)')
+        ax.set_ylabel('Motion (a.u.)')
+        ax.set_title(title + ': ' + rat)
+        ax.legend(['Motion', 'Freezing', 'Threshold'])
+    
+        # If not in the bottom-most row of subplots, remove x-axis label
+        if idx < n - cols:
+            ax.set_xlabel('')
+    
+    # If there are any remaining subplots (because of the grid), hide them
+    for idx in range(n, rows * cols):
+        axs.flat[idx].axis('off')
+        
+    plt.tight_layout()  
+    plt.subplots_adjust(hspace=.5)  # Adjust the vertical space between subplots
+    plt.show()
+
+    if save == TRUE:
+        plt.savefig(savedir)
+        plt.close()
+    
+
+
